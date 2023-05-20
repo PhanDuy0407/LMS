@@ -1,0 +1,32 @@
+version: "3.1"
+services:
+  db:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3306:3306
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=abc123
+      - MYSQL_USER=lms
+      - MYSQL_PASSWORD=abc123
+      - MYSQL_DATABASE=keycloak
+  keycloak:
+    image: jboss/keycloak:latest
+    environment:
+      - DB_VENDOR=mysql
+      - DB_ADDR=db
+      - DB_DATABASE=keycloak
+      - DB_USER=lms
+      - DB_PASSWORD=abc123
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=abc123
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - 8002:8080
+volumes:
+  db_data:
