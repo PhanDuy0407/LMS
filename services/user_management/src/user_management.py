@@ -24,9 +24,11 @@ def callback(request: Request, code: str):
     
     # Process the tokens and authenticate the user
     # Store the tokens or user information as required
-    print(token)
     
-    return {"message": "Login successful"}
+    return {
+        "success": True,
+        "token": token,
+    }
 
 @app.get("/protected")
 def protected(request: Request):
