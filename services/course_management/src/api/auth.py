@@ -1,9 +1,8 @@
-import os
 from http import HTTPStatus
-
+from fastapi import APIRouter, Depends, Request
 from common.helper import validate_token
 from common.keycloak_connection import KeycloakConnection
-from fastapi import APIRouter, Depends, Request
+from common.database_connection import DBConnection
 
 router = APIRouter()
 
@@ -32,4 +31,5 @@ def callback(request: Request, code: str):
 
 @router.get("/check", dependencies=[Depends(validate_token)])
 def check():
+
     return HTTPStatus.OK
