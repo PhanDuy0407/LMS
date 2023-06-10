@@ -1,8 +1,8 @@
 from typing import Optional
-from pydantic import BaseModel
+from controller.model.MongoBaseModel import MongoBaseModel
 from controller.model.Category import Category
 
-class Course(BaseModel):
+class Course(MongoBaseModel):
     id: str
     name: str
     description: Optional[str]

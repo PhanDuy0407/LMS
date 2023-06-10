@@ -9,6 +9,11 @@ router = APIRouter(prefix="/api/v1/courses", tags=["courses"])
 
 
 @router.get("")
-async def list_course(client=Depends(get_db)):
+async def list_courses(client=Depends(get_db)):
     controller = CourseController(client=client)
     return await controller.list_course()
+
+@router.get("/{id}")
+async def get_course(id: str, client=Depends(get_db)):
+    controller = CourseController(client=client)
+    return await controller.get_course(id)
