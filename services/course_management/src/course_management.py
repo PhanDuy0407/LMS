@@ -1,9 +1,10 @@
-from api.auth import router as auth
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from router import routers
 
 app = FastAPI()
-app.include_router(auth)
+for router in routers:
+    app.include_router(router)
 
 if __name__ == "__main__":
     import uvicorn

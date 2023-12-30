@@ -1,6 +1,6 @@
 version: "3.1"
 services:
-  db:
+  keycloak_db:
     image: mysql:8
     command: --default-authentication-plugin=mysql_native_password
     ports:
@@ -16,17 +16,39 @@ services:
     image: jboss/keycloak:latest
     environment:
       - DB_VENDOR=mysql
-      - DB_ADDR=db
+      - DB_ADDR=keycloak_db
       - DB_DATABASE=keycloak
       - DB_USER=lms
       - DB_PASSWORD=abc123
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=abc123
     depends_on:
-      - db
+      - keycloak_db
     links:
-      - db
+      - keycloak_db
     ports:
-      - 8002:8080
+      - 8080:8080
+  application_db:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - 27017:27017
+    volumes:
+      - application_data:/data/db
+  express:
+    image: mongo-express
+    ports:
+      - 9090:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_URL: mongodb://root:password@application_db:27017
+    depends_on:
+      - application_db
+    links:
+      - application_db
 volumes:
   db_data:
+  application_data:
